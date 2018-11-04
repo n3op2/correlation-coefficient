@@ -1,7 +1,7 @@
 // Correlation Test
 const data = require('./data.js');
-const a = "Price";
-const b = "Size";
+const a = "a";
+const b = "b";
 //const data = [
 //  {x: 3, y: true},
 //  {x: 10, y: true},
