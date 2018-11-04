@@ -3,9 +3,11 @@ const data = require('./data.js');
 const a = "Price";
 const b = "Size";
 //const data = [
-//  {x: 3, y: 2},
-//  {x: 3, y: 3},
-//  {x: 6, y: 4},
+//  {x: 3, y: true},
+//  {x: 10, y: true},
+//  {x: 12, y: false},
+//  {x: 4, y: false},
+//  {x: 7, y: false},
 //
 //]
 //const data = [
@@ -28,8 +30,8 @@ const getMean = (d, key, N) => {
   return sum / N;
 };
 
-const getABComb = (d, keyA, keyB, avgA, avgB) => {
-  return d.map(el => (el[keyA] - avgA) * (el[keyB] - avgB))
+const getABComb = (d, keyA, keyB, meanA, meanB) => {
+  return d.map(el => (el[keyA] - meanA) * (el[keyB] - meanB))
     .reduce((acc, cur) => acc + cur);
 };
 
@@ -39,15 +41,19 @@ const getDeviationScores = (d, key, mean, N) => {
   return Math.round(variance * 1000) / 1000;
 }
 
-const N = Object.keys(data).length;
+const getN = (d) => Object.keys(d).length;
+
+const getR = (ABComb, devA, devB) => ABComb / Math.sqrt(devA * devB);
+
+const N = getN(data);
 const meanA = getMean(data, a, N); 
 const meanB = getMean(data, b, N); 
 const devA = getDeviationScores(data, a, meanA, N);
 const devB = getDeviationScores(data, b, meanB, N);
-const abComb = getABComb(data, a, b, meanA, meanB);
-const r = abComb / Math.sqrt(devA * devB); 
+const ABComb = getABComb(data, a, b, meanA, meanB);
+const r = getR(ABComb, devA, devB); 
 
-console.log('abComb: ', abComb);
+console.log('abComb: ', ABComb);
 console.log('N: ', N);
 console.log('devA: ', devA);
 console.log('devB: ', devB);
