@@ -1,7 +1,7 @@
 // Correlation Test
-const data = require('./data2.js');
-const a = "places";
-const b = "stab";
+const data = require('./data3.js');
+const a = "events";
+const b = "squirrel";
 //const data = [
 //  {x: 3, y: true},
 //  {x: 10, y: true},
@@ -48,7 +48,7 @@ const getR = (ABComb, devA, devB) => ABComb / Math.sqrt(devA * devB);
 
 //For Binary Correlation
 const getBinR = (t) => {
-	console.log('a: ', ((t[3] * t[0]) - (t[2] * t[1]))) 
+	console.log('a: ', (t[3] * t[0] - t[2] * t[1])) 
   console.log('b: ', Math.sqrt((t[2] + t[3]) * (t[0] + t[1]) * (t[1] * t[3]) * (t[0] + t[2])));
 	return (t[3] * t[0] - t[2] * t[1]) / 
     Math.sqrt((t[2] + t[3]) * (t[0] + t[1]) * (t[1] * t[3]) * (t[0] + t[2]));
@@ -56,9 +56,10 @@ const getBinR = (t) => {
 
 const buildTable = (arg, d, keyA, keyB) => {
 	let t = [0, 0, 0, 0];
-	for(let i = 0; i < d.length; i++) {
-		let index = 0;
-		if(d[i][keyA].indexOf(arg)) index++;
+  for(let i in d) {
+		const obj = d[i];	
+    let index = 0;
+		if(d[i][keyA].indexOf(arg) != -1) index++;
 		if(d[i][keyB]) index += 2;
 		t[index]++;
 	}
@@ -75,11 +76,21 @@ const getKeyVals = (d, key) => {
 	return aKeys;
 }
 
+const keyVals = getKeyVals(data, a);
 
-console.log(getKeyVals(data, a));
-const test1 = buildTable('school', data, a, b);
-console.log(test1);
-console.log('phi: ', getBinR(test1));
+const getCorrelations = (keyVals) => {
+	let arr = [];
+	for(let i in keyVals) {
+	  arr.push({
+			name: keyVals[i],
+			phi: getBinR(buildTable(keyVals[i], data, a, b))
+		});
+	}
+	console.log(arr);
+	return arr;
+}
+
+console.log(getCorrelations(getKeyVals(data, a)));
 
 const N = getN(data);
 const meanA = getMean(data, a, N); 
