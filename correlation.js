@@ -78,19 +78,18 @@ const getKeyVals = (d, key) => {
 
 const keyVals = getKeyVals(data, a);
 
-const getCorrelations = (keyVals) => {
+const getCorrelations = (keyVals, action) => {
 	let arr = [];
 	for(let i in keyVals) {
 	  arr.push({
 			name: keyVals[i],
-			phi: getBinR(buildTable(keyVals[i], data, a, b))
+			phi: action(buildTable(keyVals[i], data, a, b))
 		});
 	}
-	console.log(arr);
 	return arr;
 }
 
-console.log(getCorrelations(getKeyVals(data, a)));
+console.log(getCorrelations(getKeyVals(data, a), getBinR));
 
 const N = getN(data);
 const meanA = getMean(data, a, N); 
